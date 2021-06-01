@@ -1,6 +1,11 @@
 import * as React from 'react';
+import { IInputs } from './generated/ManifestTypes';
 
-export const Generator: React.FunctionComponent<any> = (props) => {
+export interface IGeneratorProps {
+  PCFContext: ComponentFramework.Context<IInputs>,
+}
+
+export const Generator: React.FunctionComponent<IGeneratorProps> = (props) => {
   return (
     <div></div>
   )
