@@ -38,5 +38,6 @@ export interface FormValue {
   | ComponentFramework.EntityReference[]
   | boolean
   | number[]
-  | string[];
+  | string[]
+  | Date;
 }
