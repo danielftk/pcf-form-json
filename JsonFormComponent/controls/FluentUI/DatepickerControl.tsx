@@ -33,7 +33,7 @@ export const DatepickerControl: React.FunctionComponent<IDatepickerControlProps>
                         id={'insurgo-' + props.controlDefinition.name.toLowerCase()}
                         label={props.controlDefinition.label}
                         type="datetime-local"
-                        defaultValue={props.value[props.controlDefinition.name] as Date}
+                        defaultValue={props.value[props.controlDefinition.name] as string}
                         className={classes.textField}
                     />
                 </form>
