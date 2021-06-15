@@ -5,3 +5,4 @@ export function convertToJson<T>(value: string | null) {
     return {} as T;
   }
 }
+export const generateRandomID = () => { return Math.random().toString(36).substring(2, 15) }
