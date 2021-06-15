@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { IStackStyles, Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { Stack } from '@fluentui/react/lib/Stack';
 import { ControlDefinition } from '../../types';
-import { TextField } from '@fluentui/react/lib/components/TextField/TextField';
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import { IconButton } from '@fluentui/react/lib/components/Button/IconButton/IconButton';
+import { generateRandomID } from '../../common';
+import Chip from "@material-ui/core/Chip";
 initializeIcons();
 
 export interface ILookupControlProps {
@@ -11,15 +12,26 @@ export interface ILookupControlProps {
     lookupDefinition: ComponentFramework.UtilityApi.LookupOptions,
     value: ComponentFramework.EntityReference[]
     utils: ComponentFramework.Utility,
+    onChange: (fieldName: string, newValue: ComponentFramework.EntityReference[]) => void
+}
+interface ChipData {
+    key: number;
+    label: string;
 }
 
 export const LookupControl: React.FunctionComponent<ILookupControlProps> = (props) => {
-    let _randomID = Math.random().toString(36).substring(2, 15);
     let _value = "";
-    props.value.map((element, index) => { props.value.length - 1 > index ? _value += element.name + ", " : _value += element.name })
+    let _records = props.value;
+    if (_records) {
+        _records.map(
+            (element, index, array) => {
+                array.length - 1 > index ? _value += element.name + ", " : _value += element.name
+            }
+        )
+    }
     const _iconProps = { iconName: 'Search' };
 
-    const onLookupSearch = (
+    const _onLookupSearch = (
         utils: ComponentFramework.Utility,
         definition: ComponentFramework.UtilityApi.LookupOptions,
         successFn: (result: ComponentFramework.EntityReference[]) => void
@@ -39,25 +51,55 @@ export const LookupControl: React.FunctionComponent<ILookupControlProps> = (prop
                 (error) => console.error(error)
             );
     }
+
     return (
-        <Stack horizontal>
-            <span style={{ width: '90%' }}>
-                <TextField
-                    id={props.controlDefinition.name.toLowerCase() + '-' + _randomID}
-                    label={props.controlDefinition.label}
-                    value={_value}
-                    multiline={props.value.length > 2 ? true : false}
-                    autoAdjustHeight
-                    resizable={false}
-                />
+        <Stack
+            horizontal
+            horizontalAlign='center'
+            id={props.controlDefinition.name + '-' + generateRandomID()}
+            style={{ margin: 5, borderWidth: 1, borderStyle: 'solid', borderColor: 'black' }}
+        >
+            <span style={{ width: '90%', minHeight: 32, minWidth: 250 }}>
+                {props.value?.map((element, index, array) => {
+                    return (
+                        <Chip
+                            key={"sdda"}
+                            label={element.name.toString()}
+                            color={(element as any).entityType == 'contact' ? "primary" : "secondary"}
+                            style={{ margin: 1 }}
+                            onDelete={() => {
+                                props.onChange(
+                                    props.controlDefinition.name
+                                    , array.filter((element, _index) => _index != index)
+                                );
+                            }}
+                        />
+                    )
+                })}
+
             </span>
-            <span style={{ width: '10%', position: 'relative' }} >
+            <span style={{ width: '5%', minWidth: 32 }} >
                 <IconButton
+                    id={props.controlDefinition.name.toLowerCase() + 'Icon-' + generateRandomID()}
                     iconProps={_iconProps}
                     title="Search"
                     ariaLabel="Search"
-                    style={{ position: 'absolute', bottom: props.value.length > 2 ? '25%' : 0, left: 0 }}
-                    onClick={() => { }}
+                    onClick={
+                        () => {
+                            _onLookupSearch(
+                                props.utils, props.lookupDefinition,
+                                (result: ComponentFramework.EntityReference[]): void => {
+                                    if (result.length > 0) {
+                                        props.onChange(
+                                            props.controlDefinition.name,
+                                            [..._records, ...result]
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    style={{ height: '100%', width: '100%' }}
                 />
             </span>
         </Stack>

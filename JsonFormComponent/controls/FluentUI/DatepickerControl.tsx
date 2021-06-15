@@ -1,42 +1,36 @@
 import * as React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import { ControlDefinition, FormValue } from '../../types';
-import { Stack, StackItem } from '@fluentui/react/lib/components/Stack';
+import { ControlDefinition } from '../../types';
+import { IStackStyles, Stack, StackItem } from '@fluentui/react/lib/components/Stack';
+import { DatePicker } from '@fluentui/react/lib/components/DatePicker/DatePicker';
+import { DayOfWeek } from '@fluentui/date-time-utilities';
+import { generateRandomID } from '../../common';
 
 export interface IDatepickerControlProps {
     controlDefinition: ControlDefinition,
-    value: FormValue
+    value: Date | undefined
 }
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            flexWrap: 'wrap',
-        },
-        textField: {
-            marginLeft: theme.spacing(1),
-            marginRight: theme.spacing(1),
-            width: 200,
-        },
-    }),
-);
+const stackStyles: Partial<IStackStyles> = { root: { display: 'block' } };
 
 export const DatepickerControl: React.FunctionComponent<IDatepickerControlProps> = (props) => {
-    const classes = useStyles();
+    let _value: Date | undefined;
+    if (props.value)
+        _value = new Date(props.value!);
     return (
-        <Stack horizontal horizontalAlign='center'>
+        <Stack
+            horizontal
+            horizontalAlign='center'
+            id={props.controlDefinition.name + '-' + generateRandomID()}
+            style={{ margin: 5 }}
+            styles={stackStyles}
+        >
             <StackItem>
-                <form className={classes.container} noValidate>
-                    <TextField
-                        id={'insurgo-' + props.controlDefinition.name.toLowerCase()}
-                        label={props.controlDefinition.label}
-                        type="datetime-local"
-                        defaultValue={props.value[props.controlDefinition.name] as string}
-                        className={classes.textField}
-                    />
-                </form>
+                <DatePicker
+                    id={props.controlDefinition.name.toLowerCase() + '-' + generateRandomID()}
+                    label={props.controlDefinition.label}
+                    value={_value}
+                    firstDayOfWeek={DayOfWeek.Monday}
+                    placeholder="Select a date..."
+                    ariaLabel="Select a date" />
             </StackItem>
         </Stack>
     );

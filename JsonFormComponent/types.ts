@@ -39,5 +39,5 @@ export interface FormValue {
   | boolean
   | number[]
   | string[]
-  | Date;
+  | Date
 }
