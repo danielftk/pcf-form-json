@@ -4,6 +4,9 @@ import 'bootstrap';
 
 import { IInputs, IOutputs } from './generated/ManifestTypes';
 import { Generator } from './generator';
+import * as ReactDOM from 'react-dom'
+import * as React from 'react'
+import { GeneratorComponent, IGeneratorProps } from './_Generator';
 
 export class JsonFormComponent
   implements ComponentFramework.StandardControl<IInputs, IOutputs> {
@@ -11,26 +14,26 @@ export class JsonFormComponent
   private _notifyOutputChanged: () => void;
   private _result: string;
 
-  constructor() {}
-  public init(
-    context: ComponentFramework.Context<IInputs>,
-    notifyOutputChanged: () => void,
-    state: ComponentFramework.Dictionary,
-    container: HTMLDivElement
-  ) {
-    this._container = container;
+  constructor() { }
+
+  public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement) {
     this._notifyOutputChanged = notifyOutputChanged;
-    new Generator(this._container, context, (result) => {
-      this._result = result;
-      this._notifyOutputChanged();
-    }).generate();
+    this._container = container;
   }
 
   public updateView(context: ComponentFramework.Context<IInputs>): void {
-    new Generator(this._container, context, (result) => {
-      this._result = result;
-      this._notifyOutputChanged();
-    }).generate();
+    ReactDOM.render(
+      React.createElement(GeneratorComponent,
+        {
+          PCFContext: context,
+          submitValue: (result) => {
+            this._result = result;
+            this._notifyOutputChanged();
+          }
+
+        } as IGeneratorProps),
+      this._container
+    )
   }
 
   public getOutputs(): IOutputs {
@@ -38,5 +41,5 @@ export class JsonFormComponent
       StringProperty: this._result,
     };
   }
-  public destroy(): void {}
+  public destroy(): void { }
 }
