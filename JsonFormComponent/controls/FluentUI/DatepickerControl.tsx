@@ -7,7 +7,8 @@ import { generateRandomID } from '../../common';
 
 export interface IDatepickerControlProps {
     controlDefinition: ControlDefinition,
-    value: Date | undefined
+    value: Date | null | undefined
+    onChange: (fieldName: string, newValue: Date | string | null | undefined) => void
 }
 const stackStyles: Partial<IStackStyles> = { root: { display: 'block' } };
 
@@ -15,6 +16,7 @@ export const DatepickerControl: React.FunctionComponent<IDatepickerControlProps>
     let _value: Date | undefined;
     if (props.value)
         _value = new Date(props.value!);
+
     return (
         <Stack
             horizontal
@@ -23,6 +25,7 @@ export const DatepickerControl: React.FunctionComponent<IDatepickerControlProps>
             style={{ margin: 5 }}
             styles={stackStyles}
         >
+
             <StackItem>
                 <DatePicker
                     id={props.controlDefinition.name.toLowerCase() + '-' + generateRandomID()}
@@ -30,7 +33,14 @@ export const DatepickerControl: React.FunctionComponent<IDatepickerControlProps>
                     value={_value}
                     firstDayOfWeek={DayOfWeek.Monday}
                     placeholder="Select a date..."
-                    ariaLabel="Select a date" />
+                    ariaLabel="Select a date"
+                    onSelectDate={(_newValue) => {
+                        props.onChange(
+                            props.controlDefinition.name,
+                            _newValue?.toISOString().substring(0, 10)
+                        )
+                    }}
+                />
             </StackItem>
         </Stack>
     );

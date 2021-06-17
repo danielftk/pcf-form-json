@@ -7,7 +7,8 @@ import { generateRandomID } from '../../common';
 export interface IOptionsetControlProps {
     controlDefinition: ControlDefinition,
     value: number | string,
-    options: OptionSetDefinition[]
+    options: OptionSetDefinition[],
+    onChange: (fieldName: string, newValue: number | string) => void
 }
 const stackStyles: Partial<IStackStyles> = { root: { display: 'block' } };
 
@@ -35,8 +36,14 @@ export const OptionsetControl: React.FunctionComponent<IOptionsetControlProps> =
                     id={props.controlDefinition.name.toLowerCase() + '-' + generateRandomID()}
                     placeholder="Select an option"
                     label={props.controlDefinition.label}
-                    defaultSelectedKey={_value}
+                    selectedKey={_value}
                     options={_options}
+                    onChange={(ev, _selectedOption) => {
+                        props.onChange(
+                            props.controlDefinition.name,
+                            _selectedOption?.key!
+                        )
+                    }}
                 />
             </StackItem>
         </Stack>

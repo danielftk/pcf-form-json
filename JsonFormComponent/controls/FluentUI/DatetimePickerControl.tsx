@@ -9,7 +9,8 @@ import { generateRandomID } from '../../common';
 
 export interface IDatetimepickerControlProps {
     controlDefinition: ControlDefinition,
-    value: Date | undefined
+    value: Date | undefined,
+    onChange: (fieldName: string, newValue: Date | string | null | undefined) => void
 }
 const stackStyles: Partial<IStackStyles> = { root: { display: 'block' } };
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,10 +31,25 @@ export const DatetimepickerControl: React.FunctionComponent<IDatetimepickerContr
         if (props.value) {
             let _DateValue = new Date(props.value);
             if (_DateValue && _DateValue.toISOString() && _DateValue.toLocaleTimeString()) {
-                return (_DateValue.toISOString().substring(0, 11) + _DateValue.toLocaleTimeString());
+                var n = new Date().getTimezoneOffset();
+                let _timeString = _DateValue.toLocaleTimeString();
+                _DateValue.setMinutes(-1 * n);
+                let _dateString = _DateValue.toISOString().substring(0, 11);
+                debugger;
+                return (_dateString + _timeString);
             }
         }
         return null
+    }
+
+    const _onChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        try {
+            debugger
+            let _newValue: Date = new Date((event.target as any).valueAsNumber);
+            props.onChange(props.controlDefinition.name, _newValue.toISOString().substring(0, 19));
+        } catch (error) {
+            console.error(error);
+        }
     }
     return (
         <Stack
@@ -53,6 +69,9 @@ export const DatetimepickerControl: React.FunctionComponent<IDatetimepickerContr
                         className={classes.textField}
                         InputLabelProps={{
                             shrink: true,
+                        }}
+                        onChange={(ev: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+                            _onChange(ev);
                         }}
                     />
                 </form>

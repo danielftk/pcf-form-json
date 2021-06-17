@@ -62,18 +62,19 @@ export const LookupControl: React.FunctionComponent<ILookupControlProps> = (prop
             <span style={{ width: '90%', minHeight: 32, minWidth: 250 }}>
                 {props.value?.map((element, index, array) => {
                     return (
-                        <Chip
-                            key={"sdda"}
-                            label={element.name.toString()}
-                            color={(element as any).entityType == 'contact' ? "primary" : "secondary"}
-                            style={{ margin: 1 }}
-                            onDelete={() => {
-                                props.onChange(
-                                    props.controlDefinition.name
-                                    , array.filter((element, _index) => _index != index)
-                                );
-                            }}
-                        />
+                        <span title={element.name.toString() + ' - ' + (element as any).entityType}>
+                            <Chip
+                                label={element.name.toString()}
+                                color={(element as any).entityType == 'contact' ? "primary" : "secondary"}
+                                style={{ margin: 1 }}
+                                onDelete={() => {
+                                    props.onChange(
+                                        props.controlDefinition.name
+                                        , array.filter((element, _index) => _index != index)
+                                    );
+                                }}
+                            />
+                        </span>
                     )
                 })}
 

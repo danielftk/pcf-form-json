@@ -34,7 +34,6 @@ export const GeneratorComponent: React.FunctionComponent<IGeneratorProps> = (pro
     const [initialFormValues, setinitialFormValues] = React.useState(convertToJson<FormValue>(
         _JSONFormValues
     ))
-    console.log(_JSONFormValues)
     const obj = {} as FormValue;
 
     obj["key"] = "whatever";
@@ -96,7 +95,8 @@ export const GeneratorComponent: React.FunctionComponent<IGeneratorProps> = (pro
                                 {
                                     controlDefinition: control,
                                     value: value as number,
-                                    options: _optionSet
+                                    options: _optionSet,
+                                    onChange: _onChangeValue
                                 } as IOptionsetControlProps
                             )
                             break;
@@ -107,7 +107,8 @@ export const GeneratorComponent: React.FunctionComponent<IGeneratorProps> = (pro
                                 {
                                     controlDefinition: control,
                                     metadata: _metadata,
-                                    values: value as number[] | string[] | null
+                                    values: value as number[] | string[] | null,
+                                    onChange: _onChangeValue
                                 } as ICheckboxControlProps
                             )
                             break;
@@ -116,7 +117,8 @@ export const GeneratorComponent: React.FunctionComponent<IGeneratorProps> = (pro
                                 DatepickerControl,
                                 {
                                     controlDefinition: control,
-                                    value: value as Date
+                                    value: value as Date,
+                                    onChange: _onChangeValue
                                 } as IDatepickerControlProps
                             )
                             break;
@@ -125,7 +127,8 @@ export const GeneratorComponent: React.FunctionComponent<IGeneratorProps> = (pro
                                 DatetimepickerControl,
                                 {
                                     controlDefinition: control,
-                                    value: value as Date
+                                    value: value as Date,
+                                    onChange: _onChangeValue
                                 } as IDatetimepickerControlProps
                             )
                             break;
