@@ -31,11 +31,8 @@ export const DatetimepickerControl: React.FunctionComponent<IDatetimepickerContr
         if (props.value) {
             let _DateValue = new Date(props.value);
             if (_DateValue && _DateValue.toISOString() && _DateValue.toLocaleTimeString()) {
-                var n = new Date().getTimezoneOffset();
                 let _timeString = _DateValue.toLocaleTimeString();
-                _DateValue.setMinutes(-1 * n);
                 let _dateString = _DateValue.toISOString().substring(0, 11);
-                debugger;
                 return (_dateString + _timeString);
             }
         }
@@ -44,9 +41,15 @@ export const DatetimepickerControl: React.FunctionComponent<IDatetimepickerContr
 
     const _onChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         try {
+            let _DateValue: Date = new Date((event.target as any).valueAsNumber);
             debugger
-            let _newValue: Date = new Date((event.target as any).valueAsNumber);
-            props.onChange(props.controlDefinition.name, _newValue.toISOString().substring(0, 19));
+            var n = _DateValue.getTimezoneOffset();
+            let _dateString = _DateValue.toISOString().substring(0, 11);
+            _DateValue.setMinutes(-1 * n);
+            let _timeString = _DateValue.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            props.onChange(props.controlDefinition.name,
+                _dateString + _timeString
+            );
         } catch (error) {
             console.error(error);
         }
