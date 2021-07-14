@@ -12,13 +12,11 @@ import { DatepickerControl, IDatepickerControlProps } from './controls/FluentUI/
 import { DatetimepickerControl, IDatetimepickerControlProps } from './controls/FluentUI/DatetimePickerControl';
 import { DefaultControl, IDefaultControlProps } from './controls/FluentUI/DefaultControl';
 
-import * as JSONForm from './ControlFormJson.Sample.json'
-import * as JSONFormValues from './StringProperty.Sample.json'
-
 export interface IGeneratorProps {
     PCFContext: ComponentFramework.Context<IInputs>,
     submitValue: (newValue: any) => void
 }
+
 export const GeneratorComponent: React.FunctionComponent<IGeneratorProps> = (props) => {
     let _JSONFormDefinition = props.PCFContext.parameters.ControlFormJson.raw
     const _formDefinition = convertToJson<UiDefinition>(
@@ -34,15 +32,18 @@ export const GeneratorComponent: React.FunctionComponent<IGeneratorProps> = (pro
     const [initialFormValues, setinitialFormValues] = React.useState(convertToJson<FormValue>(
         _JSONFormValues
     ))
+
     const obj = {} as FormValue;
 
     obj["key"] = "whatever";
 
     const _onChangeValue = (fieldName: string, newValue: any) => {
+        console.log(initialFormValues)
         let _newState = initialFormValues;
         _newState[fieldName] = newValue;
         setinitialFormValues(_newState);
         props.submitValue(JSON.stringify(initialFormValues));
+        console.log(initialFormValues)
     }
 
     return (
