@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Stack, StackItem } from '@fluentui/react/lib/Stack';
-import { Toggle } from '@fluentui/react/lib/Toggle';
+import { Stack, StackItem } from '@fluentui/react/';
+import { Toggle } from '@fluentui/react/';
 import { ControlDefinition } from '../../types';
 import { generateRandomID } from '../../common';
 
@@ -17,10 +17,11 @@ export const BooleanControl: React.FunctionComponent<IBooleanControlProps> = (pr
       horizontalAlign='center'
       id={props.controlDefinition.name + '-' + generateRandomID()}
       style={{ margin: 5 }}
+      data-testid='fieldContainer'
     >
       <StackItem>
         <Toggle
-          id={props.controlDefinition.name.toLowerCase() + '-' + generateRandomID()}
+          id={props.controlDefinition.name.toLowerCase() + '-booleanField'}
           label={props.controlDefinition.label}
           checked={props.value}
           onChange={(ev, _checked) => { if (_checked != undefined) props.onChange(props.controlDefinition.name, _checked) }}

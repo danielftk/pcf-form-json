@@ -43,8 +43,7 @@ export const LookupControl: React.FunctionComponent<ILookupControlProps> = (prop
                 defaultViewId: definition.defaultViewId,
                 entityTypes: definition.entityTypes,
                 viewIds: definition.viewIds,
-            })
-            .then(
+            }).then(
                 (value: ComponentFramework.EntityReference[]) => {
                     successFn(value);
                 },
@@ -88,7 +87,8 @@ export const LookupControl: React.FunctionComponent<ILookupControlProps> = (prop
                     onClick={
                         () => {
                             _onLookupSearch(
-                                props.utils, props.lookupDefinition,
+                                props.utils,
+                                props.lookupDefinition,
                                 (result: ComponentFramework.EntityReference[]): void => {
                                     if (result.length > 0) {
                                         props.onChange(
